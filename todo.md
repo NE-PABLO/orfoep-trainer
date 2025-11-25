@@ -1,0 +1,50 @@
+# Орфоэпический Тренажер - TODO
+
+## Features
+- [x] Load word list from JSON file (267 Russian words with stress marks)
+- [x] Display random word with vowels as clickable buttons
+- [x] Highlight selected vowel when user clicks it
+- [x] Check answer against correct stress position
+- [x] Show feedback (correct/incorrect) with visual indication
+- [x] Track user statistics (total words, correct answers, accuracy percentage)
+- [x] Progress indicator showing current position in word list
+- [x] "Next word" button to move to the next word
+- [x] Mobile-responsive design optimized for phones
+- [x] Dark theme for comfortable reading
+- [ ] Keyboard support (optional: arrow keys to navigate vowels)
+- [x] Reset statistics button
+- [ ] Display all words with their correct stresses (reference list)
+
+## UI/UX Design
+- [x] Design interaction model for stress marking (tap on vowel approach)
+- [x] Create visual feedback for correct/incorrect answers
+- [x] Design mobile-first layout
+- [x] Choose color scheme and typography (dark theme with blue accents)
+- [x] Design statistics dashboard
+
+## Development
+- [x] Copy words.json to public folder
+- [x] Create main game component (StressGame.tsx)
+- [x] Implement word selection logic (useStressGame hook)
+- [x] Implement stress checking logic
+- [x] Create statistics tracking system
+- [x] Add animations and transitions
+- [ ] Test on mobile devices
+
+## Deployment
+- [ ] Create GitHub repository
+- [ ] Configure GitHub Pages deployment
+- [ ] Push code to GitHub
+- [ ] Verify deployment works
+
+## Testing
+- [x] Unit tests for vowel detection logic
+- [x] Unit tests for accuracy calculation
+- [x] Unit tests for word shuffling
+- [x] Unit tests for word cycling
+- [x] All 12 tests passing
+
+## Notes
+- Application loads 267 Russian words with stress marks
+- Dark theme applied with blue accents for vowel buttons
+- Mobile-responsive design ready for deployment
