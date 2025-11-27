@@ -1,7 +1,12 @@
 import { useStressGame } from '@/hooks/useStressGame';
+import { useUser } from '@/contexts/UserContext';
+import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
+import { CheckCircle2, XCircle, RotateCcw, ArrowLeft, BarChart3 } from 'lucide-react';
+import { trpc } from '@/lib/trpc';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function StressGame() {
   const {
@@ -20,6 +25,35 @@ export default function StressGame() {
     getVowels,
     getAccuracy,
   } = useStressGame();
+
+  const { currentUser } = useUser();
+  const [, setLocation] = useLocation();
+  const [showStats, setShowStats] = useState(false);
+  const MODULE_ID = 'orfoepiya';
+
+  const updateStatsMutation = trpc.stats.updateStats.useMutation();
+
+  // Save stats to database when they change
+  useEffect(() => {
+    if (currentUser && totalAttempts > 0) {
+      const saveStats = async () => {
+        try {
+          await updateStatsMutation.mutateAsync({
+            userId: currentUser.id,
+            moduleId: MODULE_ID,
+            totalAttempts,
+            correctAnswers,
+          });
+        } catch (error) {
+          console.error('Failed to save stats:', error);
+        }
+      };
+
+      // Save stats every time they update
+      const timer = setTimeout(saveStats, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [totalAttempts, correctAnswers, currentUser, updateStatsMutation]);
 
   if (isLoading) {
     return (
@@ -50,25 +84,50 @@ export default function StressGame() {
   const vowels = getVowels();
   const accuracy = getAccuracy();
 
+  const handleBack = () => {
+    setLocation('/');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white p-4 flex flex-col">
       {/* Header with stats */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Орфоэпический Тренажер</h1>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetGame}
-            className="bg-slate-700 border-slate-600 hover:bg-slate-600"
-          >
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Сброс
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={handleBack}
+              variant="outline"
+              size="sm"
+              className="bg-slate-700 border-slate-600 hover:bg-slate-600"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="text-2xl font-bold">Орфоэпический Тренажер</h1>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setShowStats(!showStats)}
+              variant="outline"
+              size="sm"
+              className="bg-slate-700 border-slate-600 hover:bg-slate-600"
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Статистика
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={resetGame}
+              className="bg-slate-700 border-slate-600 hover:bg-slate-600"
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Сброс
+            </Button>
+          </div>
         </div>
 
         {/* Progress and stats */}
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div className="bg-slate-700 rounded-lg p-3">
             <p className="text-slate-400 text-xs mb-1">Слово</p>
             <p className="text-lg font-semibold">{currentIndex + 1}/{words.length}</p>
@@ -86,6 +145,31 @@ export default function StressGame() {
             <p className="text-lg font-semibold">{totalAttempts}</p>
           </div>
         </div>
+
+        {/* Statistics Modal */}
+        {showStats && (
+          <div className="mt-4 bg-slate-700 rounded-lg p-4 border border-slate-600">
+            <h3 className="text-lg font-semibold mb-3">Подробная статистика</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+              <div>
+                <p className="text-slate-400 text-xs mb-1">Всего попыток</p>
+                <p className="text-xl font-bold text-blue-400">{totalAttempts}</p>
+              </div>
+              <div>
+                <p className="text-slate-400 text-xs mb-1">Правильных ответов</p>
+                <p className="text-xl font-bold text-green-400">{correctAnswers}</p>
+              </div>
+              <div>
+                <p className="text-slate-400 text-xs mb-1">Неправильных ответов</p>
+                <p className="text-xl font-bold text-red-400">{totalAttempts - correctAnswers}</p>
+              </div>
+              <div>
+                <p className="text-slate-400 text-xs mb-1">Точность</p>
+                <p className="text-xl font-bold text-yellow-400">{accuracy}%</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main game area */}
@@ -160,6 +244,15 @@ export default function StressGame() {
                   <span className="text-red-400 font-semibold">Неправильно</span>
                 </>
               )}
+            </div>
+          )}
+
+          {/* Correct answer hint */}
+          {isCorrect === false && (
+            <div className="mb-6 p-3 rounded-lg bg-blue-900/30 border border-blue-600">
+              <p className="text-blue-400 text-sm">
+                <span className="font-semibold">Правильный ответ:</span> {currentWord.stressed_word}
+              </p>
             </div>
           )}
 

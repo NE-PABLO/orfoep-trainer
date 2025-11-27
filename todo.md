@@ -31,6 +31,26 @@
 - [x] Add animations and transitions
 - [ ] Test on mobile devices
 
+## User Authentication & Database
+- [x] Upgrade project to web-db-user (add backend and database)
+- [x] Create User model in database (userAccounts and userStats tables)
+- [x] Implement user login/registration with nickname
+- [x] Create UserSession context for managing logged-in user
+- [x] Implement persistent user statistics storage
+
+## Dashboard & Exam Modules
+- [x] Create main dashboard with exam modules panel
+- [x] Create ExamCard component for each exam module
+- [x] Implement module selection and navigation
+- [x] Create layout with sidebar/navigation
+
+## Stress Trainer Enhancements
+- [x] Add statistics summary modal/panel
+- [x] Display correct answer when user answers wrong
+- [x] Implement statistics persistence to database
+- [x] Add "View Statistics" button
+- [ ] Add "Reset Statistics" functionality
+
 ## Deployment
 - [ ] Create GitHub repository
 - [ ] Configure GitHub Pages deployment
@@ -43,8 +63,12 @@
 - [x] Unit tests for word shuffling
 - [x] Unit tests for word cycling
 - [x] All 12 tests passing
+- [x] Test user authentication flow (9 tests passing)
+- [x] Test statistics persistence (5 tests for stats endpoints)
+- [ ] Test dashboard navigation
 
 ## Notes
 - Application loads 267 Russian words with stress marks
 - Dark theme applied with blue accents for vowel buttons
 - Mobile-responsive design ready for deployment
+- Upgrading to full-stack with database for user management and statistics
