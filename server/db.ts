@@ -109,9 +109,10 @@ export async function createUserAccount(nickname: string) {
   }
 
   try {
-    const result = await db.insert(userAccounts).values({ nickname });
+    const now = new Date();
+    const result = await db.insert(userAccounts).values({ nickname, lastLoginAt: now });
     const insertedId = (result as any).insertId;
-    return { id: insertedId, nickname, createdAt: new Date(), updatedAt: new Date() };
+    return { id: insertedId, nickname, lastLoginAt: now, createdAt: now, updatedAt: now };
   } catch (error) {
     console.error("[Database] Failed to create user account:", error);
     throw error;
@@ -189,4 +190,21 @@ export async function getAllUserStats(userId: number) {
   }
 
   return await db.select().from(userStats).where(eq(userStats.userId, userId));
+}
+
+export async function updateUserLastLogin(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update last login: database not available");
+    return undefined;
+  }
+
+  try {
+    await db.update(userAccounts)
+      .set({ lastLoginAt: new Date() })
+      .where(eq(userAccounts.id, userId));
+  } catch (error) {
+    console.error("[Database] Failed to update last login:", error);
+    throw error;
+  }
 }

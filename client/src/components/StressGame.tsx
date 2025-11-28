@@ -33,6 +33,16 @@ export default function StressGame() {
 
   const updateStatsMutation = trpc.stats.updateStats.useMutation();
 
+  // Auto-advance on correct answer
+  useEffect(() => {
+    if (isCorrect === true) {
+      const timer = setTimeout(() => {
+        nextWord();
+      }, 1500); // Wait 1.5 seconds before advancing
+      return () => clearTimeout(timer);
+    }
+  }, [isCorrect, nextWord]);
+
   // Save stats to database when they change
   useEffect(() => {
     if (currentUser && totalAttempts > 0) {
@@ -256,14 +266,21 @@ export default function StressGame() {
             </div>
           )}
 
-          {/* Next button */}
-          {isCorrect !== null && (
+          {/* Next button - only show when answer is wrong */}
+          {isCorrect === false && (
             <Button
               onClick={nextWord}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
             >
               Следующее слово →
             </Button>
+          )}
+
+          {/* Auto-advance message for correct answers */}
+          {isCorrect === true && (
+            <div className="text-slate-300 text-sm">
+              Переход к следующему слову...
+            </div>
           )}
         </Card>
       </div>

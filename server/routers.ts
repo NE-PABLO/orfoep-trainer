@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { getUserAccountByNickname, createUserAccount, getUserStats, updateUserStats, getAllUserStats } from "./db";
+import { getUserAccountByNickname, createUserAccount, getUserStats, updateUserStats, getAllUserStats, updateUserLastLogin } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
@@ -28,6 +28,11 @@ export const appRouter = router({
         
         if (!user) {
           user = await createUserAccount(nickname);
+        } else {
+          // Update last login time
+          if (user.id) {
+            await updateUserLastLogin(user.id);
+          }
         }
         
         return {

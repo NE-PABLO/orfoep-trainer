@@ -31,6 +31,7 @@ export type InsertUser = typeof users.$inferInsert;
 export const userAccounts = mysqlTable("user_accounts", {
   id: int("id").autoincrement().primaryKey(),
   nickname: varchar("nickname", { length: 64 }).notNull().unique(),
+  lastLoginAt: timestamp("lastLoginAt").defaultNow().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

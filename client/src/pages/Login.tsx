@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useLocation } from 'wouter';
+import { useUser } from '@/contexts/UserContext';
 import { toast } from 'sonner';
 
 export default function Login() {
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
+  const { setCurrentUser } = useUser();
   
   const loginMutation = trpc.users.loginByNickname.useMutation();
 
@@ -25,9 +27,12 @@ export default function Login() {
     try {
       const result = await loginMutation.mutateAsync({ nickname: nickname.trim() });
       
-      if (result.success && result.user) {
-        // Store user info in localStorage
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
+      if (result.success && result.user && result.user.id && result.user.nickname) {
+        // Set user in context
+        setCurrentUser({
+          id: result.user.id,
+          nickname: result.user.nickname,
+        });
         toast.success(`Добро пожаловать, ${nickname}!`);
         setLocation('/');
       }

@@ -50,6 +50,8 @@
 - [x] Implement statistics persistence to database
 - [x] Add "View Statistics" button
 - [ ] Add "Reset Statistics" functionality
+- [x] Auto-advance to next word on correct answer (1.5 second delay)
+- [x] Save users to database instead of localStorage
 
 ## Deployment
 - [ ] Create GitHub repository
@@ -71,4 +73,8 @@
 - Application loads 267 Russian words with stress marks
 - Dark theme applied with blue accents for vowel buttons
 - Mobile-responsive design ready for deployment
-- Upgrading to full-stack with database for user management and statistics
+- Full-stack with database for user management and statistics
+- Users are now persisted in database (userAccounts table)
+- Auto-advance on correct answer with 1.5 second delay
+- All 9 unit tests passing
+- Ready for production deployment
