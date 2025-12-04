@@ -1,0 +1,8 @@
+# This file is used by Cloudflare Pages Functions
+# Place it in the root directory for Cloudflare Pages to recognize server functions
+
+# Cloudflare Pages automatically serves functions from the /functions directory
+# Our server code is in /server, so we need to configure the build output
+
+# The build process creates dist/index.js which is the compiled server code
+# Cloudflare Pages will use this for handling API requests

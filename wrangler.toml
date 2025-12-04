@@ -1,44 +1,14 @@
 name = "orfoep-trainer"
-type = "javascript"
-account_id = ""
-workers_dev = true
-route = ""
-zone_id = ""
 
-# Build configuration
+# Build configuration for Cloudflare Pages
 [build]
-command = "pnpm build"
+command = "pnpm install && pnpm build"
 cwd = "./"
-watch_paths = ["client/src/**/*.tsx", "client/src/**/*.ts", "server/**/*.ts"]
 
-# Environment configuration
+# Environment variables for production
 [env.production]
-name = "orfoep-trainer-prod"
-routes = [
-  { pattern = "example.com/*", zone_name = "example.com" }
-]
+vars = { DATABASE_URL = "", JWT_SECRET = "", OAUTH_SERVER_URL = "https://api.manus.im", VITE_APP_TITLE = "Орфоэпический Тренажер", VITE_APP_LOGO = "/logo.svg" }
 
-# Cloudflare Pages Functions configuration
-[functions]
-directory = "server"
-main = "server/_core/index.ts"
-
-# Database binding (for D1)
-[[d1_databases]]
-binding = "DB"
-database_name = "orfoep-trainer-db"
-database_id = ""
-
-# KV namespace bindings
-[[kv_namespaces]]
-binding = "KV"
-id = ""
-preview_id = ""
-
-# Environment variables
-[env.production.vars]
-DATABASE_URL = ""
-JWT_SECRET = ""
-OAUTH_SERVER_URL = "https://api.manus.im"
-VITE_APP_TITLE = "Орфоэпический Тренажер"
-VITE_APP_LOGO = "/logo.svg"
+# Environment variables for preview
+[env.preview]
+vars = { DATABASE_URL = "", JWT_SECRET = "", OAUTH_SERVER_URL = "https://api.manus.im", VITE_APP_TITLE = "Орфоэпический Тренажер", VITE_APP_LOGO = "/logo.svg" }
