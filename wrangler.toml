@@ -1,14 +1,10 @@
+# Cloudflare Pages configuration
+# This file is minimal and only contains build configuration
+# Deploy is handled by Cloudflare Pages automatically
+
 name = "orfoep-trainer"
 
 # Build configuration for Cloudflare Pages
 [build]
 command = "pnpm install && pnpm build"
 cwd = "./"
-
-# Environment variables for production
-[env.production]
-vars = { DATABASE_URL = "", JWT_SECRET = "", OAUTH_SERVER_URL = "https://api.manus.im", VITE_APP_TITLE = "Орфоэпический Тренажер", VITE_APP_LOGO = "/logo.svg" }
-
-# Environment variables for preview
-[env.preview]
-vars = { DATABASE_URL = "", JWT_SECRET = "", OAUTH_SERVER_URL = "https://api.manus.im", VITE_APP_TITLE = "Орфоэпический Тренажер", VITE_APP_LOGO = "/logo.svg" }
